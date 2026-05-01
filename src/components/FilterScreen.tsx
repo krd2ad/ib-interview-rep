@@ -148,12 +148,17 @@ export default function FilterScreen({ initial, onApply }: Props) {
 
             {/* Footer */}
             <div className="flex items-center justify-between pt-6 border-t border-white/[0.06]">
-              <span className="text-white/30 text-sm">
-                {isFiltered ? `${matchCount} of ${TOTAL} questions` : `${TOTAL} questions`}
+              <span className={`text-sm ${matchCount === 0 && isFiltered ? 'text-rose-400/70' : 'text-white/30'}`}>
+                {!isFiltered
+                  ? `${TOTAL} questions`
+                  : matchCount === 0
+                  ? 'No questions match — adjust filters'
+                  : `${matchCount} of ${TOTAL} questions`}
               </span>
               <button
                 onClick={() => onApply({ categories, difficulties })}
-                className="px-6 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white transition-all shadow-lg shadow-indigo-500/20"
+                disabled={matchCount === 0}
+                className="px-6 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-indigo-500/20"
               >
                 Start Practicing
               </button>

@@ -5,5 +5,5 @@ export function buildPool(categories: string[], difficulties: string[]): Questio
   let pool: Question[] = questions
   if (categories.length > 0) pool = pool.filter((q) => categories.includes(q.category))
   if (difficulties.length > 0) pool = pool.filter((q) => difficulties.includes(q.difficulty))
-  return pool.length > 0 ? pool : questions
+  return pool
 }
