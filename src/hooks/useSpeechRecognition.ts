@@ -1,14 +1,44 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 
+interface SpeechRecognitionAlternative {
+  transcript: string
+}
+
+interface SpeechRecognitionResult {
+  isFinal: boolean
+  readonly length: number
+  [index: number]: SpeechRecognitionAlternative
+}
+
+interface SpeechRecognitionResultList {
+  readonly length: number
+  [index: number]: SpeechRecognitionResult
+}
+
+interface SpeechRecognitionEvent extends Event {
+  resultIndex: number
+  results: SpeechRecognitionResultList
+}
+
+interface SpeechRecognitionInstance extends EventTarget {
+  continuous: boolean
+  interimResults: boolean
+  lang: string
+  start(): void
+  stop(): void
+  onresult: ((event: SpeechRecognitionEvent) => void) | null
+  onend: (() => void) | null
+}
+
 type SpeechRecognitionWindow = typeof window & {
-  webkitSpeechRecognition?: new () => SpeechRecognition
-  SpeechRecognition?: new () => SpeechRecognition
+  webkitSpeechRecognition?: new () => SpeechRecognitionInstance
+  SpeechRecognition?: new () => SpeechRecognitionInstance
 }
 
 export function useSpeechRecognition(onTranscript: (text: string) => void) {
   const [isListening, setIsListening] = useState(false)
   const [isSupported, setIsSupported] = useState(false)
-  const recognitionRef = useRef<SpeechRecognition | null>(null)
+  const recognitionRef = useRef<SpeechRecognitionInstance | null>(null)
   const onTranscriptRef = useRef(onTranscript)
   onTranscriptRef.current = onTranscript
 
@@ -22,7 +52,7 @@ export function useSpeechRecognition(onTranscript: (text: string) => void) {
     recognition.interimResults = false
     recognition.lang = 'en-US'
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       let transcript = ''
       for (let i = event.resultIndex; i < event.results.length; i++) {
         if (event.results[i].isFinal) {
