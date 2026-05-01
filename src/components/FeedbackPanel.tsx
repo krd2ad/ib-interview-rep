@@ -3,8 +3,15 @@ import type { EvaluationResponse } from '../lib/types'
 
 interface Props {
   feedback: EvaluationResponse
+  costUsd: number
   onTryAgain: () => void
   onNewQuestion: () => void
+}
+
+function formatCost(usd: number): string {
+  if (usd === 0) return '$0.0000'
+  if (usd < 0.01) return `$${usd.toFixed(4)}`
+  return `$${usd.toFixed(2)}`
 }
 
 function scoreColor(score: number) {
@@ -27,7 +34,7 @@ function scoreBadgeStyle(score: number) {
   return 'bg-rose-400/10 border-rose-400/20'
 }
 
-export default function FeedbackPanel({ feedback, onTryAgain, onNewQuestion }: Props) {
+export default function FeedbackPanel({ feedback, costUsd, onTryAgain, onNewQuestion }: Props) {
   return (
     <div className="mt-4 bg-white/[0.03] backdrop-blur-xl border border-white/10 rounded-2xl p-8 shadow-2xl animate-slide-up">
       {/* Score */}
@@ -93,22 +100,27 @@ export default function FeedbackPanel({ feedback, onTryAgain, onNewQuestion }: P
         </div>
       </div>
 
-      {/* Actions */}
-      <div className="flex items-center gap-3 mt-7 pt-6 border-t border-white/[0.06]">
-        <button
-          onClick={onTryAgain}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80 transition-all"
-        >
-          <RefreshCw size={14} />
-          Try Again
-        </button>
-        <button
-          onClick={onNewQuestion}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white transition-all shadow-lg shadow-indigo-500/20"
-        >
-          New Question
-          <ChevronRight size={14} />
-        </button>
+      {/* Actions + cost */}
+      <div className="mt-7 pt-6 border-t border-white/[0.06]">
+        <div className="flex items-center gap-3">
+          <button
+            onClick={onTryAgain}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-medium border border-white/10 bg-white/5 text-white/60 hover:bg-white/10 hover:text-white/80 transition-all"
+          >
+            <RefreshCw size={14} />
+            Try Again
+          </button>
+          <button
+            onClick={onNewQuestion}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white transition-all shadow-lg shadow-indigo-500/20"
+          >
+            New Question
+            <ChevronRight size={14} />
+          </button>
+        </div>
+        <p className="text-white/20 text-xs mt-3">
+          API cost: {formatCost(costUsd)}
+        </p>
       </div>
     </div>
   )

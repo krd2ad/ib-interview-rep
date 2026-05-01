@@ -15,6 +15,7 @@ export default function App() {
   const { currentQuestion, newQuestion } = useRandomQuestion()
   const [answer, setAnswer] = useState('')
   const [feedback, setFeedback] = useState<EvaluationResponse | null>(null)
+  const [costUsd, setCostUsd] = useState<number | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -37,7 +38,7 @@ export default function App() {
     setError(null)
 
     try {
-      const result = await evaluateAnswer(
+      const { feedback: result, costUsd: cost } = await evaluateAnswer(
         {
           question: currentQuestion.question,
           answer,
@@ -47,6 +48,7 @@ export default function App() {
         apiKey,
       )
       setFeedback(result)
+      setCostUsd(cost)
     } catch {
       setError('Something went wrong while reviewing your answer. Please try again.')
     } finally {
@@ -57,6 +59,7 @@ export default function App() {
   function handleTryAgain() {
     setAnswer('')
     setFeedback(null)
+    setCostUsd(null)
     setError(null)
   }
 
@@ -64,6 +67,7 @@ export default function App() {
     newQuestion()
     setAnswer('')
     setFeedback(null)
+    setCostUsd(null)
     setError(null)
   }
 
@@ -94,6 +98,7 @@ export default function App() {
       {feedback && (
         <FeedbackPanel
           feedback={feedback}
+          costUsd={costUsd ?? 0}
           onTryAgain={handleTryAgain}
           onNewQuestion={handleNewQuestion}
         />

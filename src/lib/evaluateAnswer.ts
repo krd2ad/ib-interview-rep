@@ -45,10 +45,19 @@ For technical questions, evaluate on: accuracy, completeness, clarity, prioritiz
 Use move_on when score is 8 or higher. Use try_again when score is below 8.`
 }
 
+// Pricing for claude-haiku-4-5-20251001 (per token)
+const INPUT_COST_PER_TOKEN = 0.80 / 1_000_000
+const OUTPUT_COST_PER_TOKEN = 4.00 / 1_000_000
+
+export type EvaluationResult = {
+  feedback: EvaluationResponse
+  costUsd: number
+}
+
 export async function evaluateAnswer(
   input: EvaluationRequest,
   apiKey: string,
-): Promise<EvaluationResponse> {
+): Promise<EvaluationResult> {
   const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true })
 
   const response = await client.messages.create({
@@ -97,5 +106,9 @@ export async function evaluateAnswer(
   const toolUse = response.content.find((b) => b.type === 'tool_use')
   if (!toolUse || toolUse.type !== 'tool_use') throw new Error('Unexpected response from AI')
 
-  return toolUse.input as EvaluationResponse
+  const costUsd =
+    response.usage.input_tokens * INPUT_COST_PER_TOKEN +
+    response.usage.output_tokens * OUTPUT_COST_PER_TOKEN
+
+  return { feedback: toolUse.input as EvaluationResponse, costUsd }
 }
