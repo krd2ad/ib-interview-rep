@@ -1,17 +1,17 @@
 import { useState } from 'react'
-import ApiKeyGate from './components/ApiKeyGate'
 import FeedbackPanel from './components/FeedbackPanel'
 import Layout from './components/Layout'
 import LoadingState from './components/LoadingState'
+import PasswordGate from './components/PasswordGate'
 import QuestionCard from './components/QuestionCard'
 import { useRandomQuestion } from './hooks/useRandomQuestion'
 import { evaluateAnswer } from './lib/evaluateAnswer'
 import type { EvaluationResponse } from './lib/types'
 
-const STORAGE_KEY = 'ib-rep-api-key'
+const UNLOCK_KEY = 'ib-rep-unlocked'
 
 export default function App() {
-  const [apiKey, setApiKey] = useState<string>(() => localStorage.getItem(STORAGE_KEY) ?? '')
+  const [unlocked, setUnlocked] = useState(() => localStorage.getItem(UNLOCK_KEY) === 'true')
   const { currentQuestion, newQuestion } = useRandomQuestion()
   const [answer, setAnswer] = useState('')
   const [feedback, setFeedback] = useState<EvaluationResponse | null>(null)
@@ -19,16 +19,9 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  function handleSaveKey(key: string) {
-    localStorage.setItem(STORAGE_KEY, key)
-    setApiKey(key)
-  }
-
-  function handleClearKey() {
-    localStorage.removeItem(STORAGE_KEY)
-    setApiKey('')
-    setFeedback(null)
-    setError(null)
+  function handleUnlock() {
+    localStorage.setItem(UNLOCK_KEY, 'true')
+    setUnlocked(true)
   }
 
   async function handleSubmit() {
@@ -38,15 +31,12 @@ export default function App() {
     setError(null)
 
     try {
-      const { feedback: result, costUsd: cost } = await evaluateAnswer(
-        {
-          question: currentQuestion.question,
-          answer,
-          category: currentQuestion.category,
-          difficulty: currentQuestion.difficulty,
-        },
-        apiKey,
-      )
+      const { feedback: result, costUsd: cost } = await evaluateAnswer({
+        question: currentQuestion.question,
+        answer,
+        category: currentQuestion.category,
+        difficulty: currentQuestion.difficulty,
+      })
       setFeedback(result)
       setCostUsd(cost)
     } catch {
@@ -71,12 +61,12 @@ export default function App() {
     setError(null)
   }
 
-  if (!apiKey) {
-    return <ApiKeyGate onSave={handleSaveKey} />
+  if (!unlocked) {
+    return <PasswordGate onUnlock={handleUnlock} />
   }
 
   return (
-    <Layout onClearKey={handleClearKey}>
+    <Layout>
       <QuestionCard
         question={currentQuestion}
         answer={answer}

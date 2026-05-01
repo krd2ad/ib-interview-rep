@@ -54,11 +54,11 @@ export type EvaluationResult = {
   costUsd: number
 }
 
-export async function evaluateAnswer(
-  input: EvaluationRequest,
-  apiKey: string,
-): Promise<EvaluationResult> {
-  const client = new Anthropic({ apiKey, dangerouslyAllowBrowser: true })
+export async function evaluateAnswer(input: EvaluationRequest): Promise<EvaluationResult> {
+  const client = new Anthropic({
+    apiKey: import.meta.env.VITE_ANTHROPIC_API_KEY,
+    dangerouslyAllowBrowser: true,
+  })
 
   const response = await client.messages.create({
     model: 'claude-haiku-4-5-20251001',
