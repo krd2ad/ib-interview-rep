@@ -13,10 +13,13 @@ export default function Layout({ children, onShowFilters }: Props) {
       <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-violet-600/5 rounded-full blur-3xl pointer-events-none" />
 
       {/* Logo + filters button */}
-      <header className="relative z-10 px-6 pt-6 flex items-center justify-between">
-        <span className="text-white font-semibold tracking-tight text-lg select-none">
-          IB Prep
-        </span>
+      <header className="relative z-10 px-6 pt-6 flex items-start justify-between">
+        <div>
+          <span className="text-white font-semibold tracking-tight text-lg select-none">
+            Investment Banking Interview Prep
+          </span>
+          <p className="text-white/35 text-xs mt-0.5 select-none">For those in need of review...</p>
+        </div>
         <button
           onClick={onShowFilters}
           aria-label="Customize filters"

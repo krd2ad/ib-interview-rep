@@ -31,8 +31,8 @@ export default function PasswordGate({ onUnlock }: Props) {
             <Lock size={16} className="text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-white font-semibold leading-none mb-1">IB Prep</h1>
-            <p className="text-white/40 text-xs">Enter the access password to continue</p>
+            <h1 className="text-white font-semibold leading-none mb-1">Investment Banking Interview Prep</h1>
+            <p className="text-white/40 text-xs">For those in need of review...</p>
           </div>
         </div>
 
