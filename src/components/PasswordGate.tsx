@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Lock } from 'lucide-react'
 
-const PASSWORD = 'DARDENIBPREP'
+const PASSWORD = 'DARDENCO2028'
 
 interface Props {
-  onUnlock: () => void
+  onUnlock: (password: string) => void
 }
 
 export default function PasswordGate({ onUnlock }: Props) {
@@ -14,7 +14,7 @@ export default function PasswordGate({ onUnlock }: Props) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (value.trim().toUpperCase() === PASSWORD) {
-      onUnlock()
+      onUnlock(value.trim().toUpperCase())
     } else {
       setError(true)
       setValue('')

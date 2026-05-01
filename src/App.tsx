@@ -11,6 +11,7 @@ import { evaluateAnswer } from './lib/evaluateAnswer'
 import type { EvaluationResponse, FilterState } from './lib/types'
 
 const UNLOCK_KEY = 'ib-prep-unlocked'
+const PASSWORD_KEY = 'ib-prep-password'
 const FILTER_KEY = 'ib-prep-filter'
 
 function loadFilter(): FilterState {
@@ -25,6 +26,7 @@ type View = 'filter' | 'app'
 
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => localStorage.getItem(UNLOCK_KEY) === 'true')
+  const [sitePassword, setSitePassword] = useState(() => localStorage.getItem(PASSWORD_KEY) ?? '')
   const [view, setView] = useState<View>('filter')
   const [filter, setFilter] = useState<FilterState>(loadFilter)
 
@@ -37,8 +39,10 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  function handleUnlock() {
+  function handleUnlock(password: string) {
     localStorage.setItem(UNLOCK_KEY, 'true')
+    localStorage.setItem(PASSWORD_KEY, password)
+    setSitePassword(password)
     setUnlocked(true)
   }
 
@@ -66,7 +70,7 @@ export default function App() {
         answer,
         category: currentQuestion.category,
         difficulty: currentQuestion.difficulty,
-      })
+      }, sitePassword)
       setFeedback(result)
       setCostUsd(cost)
     } catch {
