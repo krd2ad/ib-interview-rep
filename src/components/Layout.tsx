@@ -1,4 +1,4 @@
-import { SlidersHorizontal } from 'lucide-react'
+import { Github, Linkedin, SlidersHorizontal } from 'lucide-react'
 
 interface Props {
   children: React.ReactNode
@@ -51,17 +51,19 @@ export default function Layout({ children, onShowFilters }: Props) {
           href="https://github.com/krd2ad/ib-interview-rep"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white/25 text-xs hover:text-white/50 transition-colors"
+          className="flex items-center gap-1.5 text-white/25 text-xs hover:text-white/50 transition-colors"
         >
+          <Github size={12} />
           Like this? Check it out on GitHub
         </a>
         <a
           href="https://www.linkedin.com/in/kiernan-dimeglio/"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white/25 text-xs hover:text-white/50 transition-colors"
+          className="flex items-center gap-1.5 text-white/25 text-xs hover:text-white/50 transition-colors"
         >
-          Contact the site owner
+          <Linkedin size={12} />
+          Contact Me
         </a>
       </footer>
     </div>
