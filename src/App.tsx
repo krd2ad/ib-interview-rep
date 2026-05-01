@@ -1,19 +1,36 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import FeedbackPanel from './components/FeedbackPanel'
+import FilterScreen from './components/FilterScreen'
 import Layout from './components/Layout'
 import LoadingState from './components/LoadingState'
 import PasswordGate from './components/PasswordGate'
 import QuestionCard from './components/QuestionCard'
 import { useRandomQuestion } from './hooks/useRandomQuestion'
+import { buildPool } from './lib/buildPool'
 import { evaluateAnswer } from './lib/evaluateAnswer'
-import type { EvaluationResponse } from './lib/types'
+import type { EvaluationResponse, FilterState } from './lib/types'
 
-// persists password unlock across sessions
-const UNLOCK_KEY = 'ib-rep-unlocked'
+const UNLOCK_KEY = 'ib-prep-unlocked'
+const FILTER_KEY = 'ib-prep-filter'
+
+function loadFilter(): FilterState {
+  try {
+    const stored = localStorage.getItem(FILTER_KEY)
+    if (stored) return JSON.parse(stored) as FilterState
+  } catch { /* ignore */ }
+  return { categories: [], difficulties: [] }
+}
+
+type View = 'filter' | 'app'
 
 export default function App() {
   const [unlocked, setUnlocked] = useState(() => localStorage.getItem(UNLOCK_KEY) === 'true')
-  const { currentQuestion, newQuestion } = useRandomQuestion()
+  const [view, setView] = useState<View>('filter')
+  const [filter, setFilter] = useState<FilterState>(loadFilter)
+
+  const pool = useMemo(() => buildPool(filter.categories, filter.difficulties), [filter])
+  const { currentQuestion, newQuestion, jumpTo } = useRandomQuestion(pool)
+
   const [answer, setAnswer] = useState('')
   const [feedback, setFeedback] = useState<EvaluationResponse | null>(null)
   const [costUsd, setCostUsd] = useState<number | null>(null)
@@ -23,6 +40,18 @@ export default function App() {
   function handleUnlock() {
     localStorage.setItem(UNLOCK_KEY, 'true')
     setUnlocked(true)
+  }
+
+  function handleApplyFilter(newFilter: FilterState) {
+    const newPool = buildPool(newFilter.categories, newFilter.difficulties)
+    localStorage.setItem(FILTER_KEY, JSON.stringify(newFilter))
+    setFilter(newFilter)
+    jumpTo(newPool[Math.floor(Math.random() * newPool.length)])
+    setAnswer('')
+    setFeedback(null)
+    setCostUsd(null)
+    setError(null)
+    setView('app')
   }
 
   async function handleSubmit() {
@@ -62,12 +91,14 @@ export default function App() {
     setError(null)
   }
 
-  if (!unlocked) {
-    return <PasswordGate onUnlock={handleUnlock} />
+  if (!unlocked) return <PasswordGate onUnlock={handleUnlock} />
+
+  if (view === 'filter') {
+    return <FilterScreen initial={filter} onApply={handleApplyFilter} />
   }
 
   return (
-    <Layout>
+    <Layout onShowFilters={() => setView('filter')}>
       <QuestionCard
         question={currentQuestion}
         answer={answer}

@@ -1,17 +1,19 @@
-import { useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import type { Question } from '../lib/types'
-import { questions } from '../data/questions'
 
-function getRandomQuestion(): Question {
-  return questions[Math.floor(Math.random() * questions.length)]
-}
+export function useRandomQuestion(pool: Question[]) {
+  // Always reflects the latest pool without recreating newQuestion on every render
+  const poolRef = useRef(pool)
+  poolRef.current = pool
 
-export function useRandomQuestion() {
-  const [currentQuestion, setCurrentQuestion] = useState<Question>(() => getRandomQuestion())
+  const [currentQuestion, setCurrentQuestion] = useState<Question>(
+    () => pool[Math.floor(Math.random() * pool.length)],
+  )
 
-  function newQuestion() {
-    setCurrentQuestion(getRandomQuestion())
-  }
+  const newQuestion = useCallback(() => {
+    const p = poolRef.current
+    setCurrentQuestion(p[Math.floor(Math.random() * p.length)])
+  }, [])
 
-  return { currentQuestion, newQuestion }
+  return { currentQuestion, newQuestion, jumpTo: setCurrentQuestion }
 }

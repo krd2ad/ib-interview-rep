@@ -5,6 +5,11 @@ export type Question = {
   question: string
 }
 
+export type FilterState = {
+  categories: string[]
+  difficulties: string[]
+}
+
 export type EvaluationRequest = {
   question: string
   answer: string
