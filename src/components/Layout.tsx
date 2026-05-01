@@ -28,11 +28,23 @@ export default function Layout({ children, onShowFilters }: Props) {
       </header>
 
       {/* Main content */}
-      <main className="relative z-10 flex flex-col items-center px-4 pt-8 pb-16">
+      <main className="relative z-10 flex flex-col items-center px-4 pt-8 pb-8">
         <div className="w-full max-w-[760px]">
           {children}
         </div>
       </main>
+
+      {/* Footer */}
+      <footer className="relative z-10 pb-8 flex justify-center">
+        <a
+          href="https://buymeacoffee.com/kiernan"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white/25 text-xs hover:text-white/50 transition-colors"
+        >
+          Support the API token usage ☕
+        </a>
+      </footer>
     </div>
   )
 }
