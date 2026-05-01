@@ -38,7 +38,7 @@ export default function Layout({ children, onShowFilters }: Props) {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 pb-8 flex justify-center">
+      <footer className="relative z-10 pb-8 flex justify-center gap-6">
         <a
           href="https://buymeacoffee.com/kiernan"
           target="_blank"
@@ -46,6 +46,14 @@ export default function Layout({ children, onShowFilters }: Props) {
           className="text-white/25 text-xs hover:text-white/50 transition-colors"
         >
           Support the API token usage ☕
+        </a>
+        <a
+          href="https://github.com/krd2ad/ib-interview-rep"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white/25 text-xs hover:text-white/50 transition-colors"
+        >
+          Like this? Check it out on GitHub
         </a>
       </footer>
     </div>
