@@ -10,9 +10,9 @@ import { buildPool } from './lib/buildPool'
 import { evaluateAnswer } from './lib/evaluateAnswer'
 import type { EvaluationResponse, FilterState } from './lib/types'
 
-const UNLOCK_KEY = 'ib-prep-unlocked'
 const PASSWORD_KEY = 'ib-prep-password'
 const FILTER_KEY = 'ib-prep-filter'
+const CURRENT_PASSWORD = 'DARDENCO2028'
 
 function loadFilter(): FilterState {
   try {
@@ -25,8 +25,8 @@ function loadFilter(): FilterState {
 type View = 'filter' | 'app'
 
 export default function App() {
-  const [unlocked, setUnlocked] = useState(() => localStorage.getItem(UNLOCK_KEY) === 'true')
   const [sitePassword, setSitePassword] = useState(() => localStorage.getItem(PASSWORD_KEY) ?? '')
+  const unlocked = sitePassword === CURRENT_PASSWORD
   const [view, setView] = useState<View>('filter')
   const [filter, setFilter] = useState<FilterState>(loadFilter)
 
@@ -40,10 +40,8 @@ export default function App() {
   const [error, setError] = useState<string | null>(null)
 
   function handleUnlock(password: string) {
-    localStorage.setItem(UNLOCK_KEY, 'true')
     localStorage.setItem(PASSWORD_KEY, password)
     setSitePassword(password)
-    setUnlocked(true)
   }
 
   function handleApplyFilter(newFilter: FilterState) {
