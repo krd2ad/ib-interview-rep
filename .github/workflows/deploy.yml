@@ -32,7 +32,6 @@ jobs:
       - name: Build
         run: npm run build
         env:
-          VITE_BASE_PATH: /${{ github.event.repository.name }}/
           VITE_EVALUATION_API_URL: https://ib-interview-evaluator-api.vercel.app/api/evaluate
 
       - uses: actions/configure-pages@v4
