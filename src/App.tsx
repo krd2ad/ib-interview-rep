@@ -8,6 +8,7 @@ import { useRandomQuestion } from './hooks/useRandomQuestion'
 import { evaluateAnswer } from './lib/evaluateAnswer'
 import type { EvaluationResponse } from './lib/types'
 
+// persists password unlock across sessions
 const UNLOCK_KEY = 'ib-rep-unlocked'
 
 export default function App() {
