@@ -55,6 +55,14 @@ export default function Layout({ children, onShowFilters }: Props) {
         >
           Like this? Check it out on GitHub
         </a>
+        <a
+          href="https://www.linkedin.com/in/kiernan-dimeglio/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-white/25 text-xs hover:text-white/50 transition-colors"
+        >
+          Contact the site owner
+        </a>
       </footer>
     </div>
   )
