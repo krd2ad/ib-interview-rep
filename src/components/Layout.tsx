@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       {/* Logo */}
       <header className="relative z-10 px-6 pt-6">
         <span className="text-white font-semibold tracking-tight text-lg select-none">
-          IB Rep
+          IB Prep
         </span>
       </header>
 
