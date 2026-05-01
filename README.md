@@ -46,3 +46,7 @@ Questions live in `src/data/questions.ts`. IDs follow `category-NNN`. 22 categor
 ## Deployment
 
 Pushing to `main` triggers `.github/workflows/deploy.yml`, which builds and deploys to GitHub Pages automatically. `VITE_EVALUATION_API_URL` is baked in at build time — no secrets needed in this repo.
+
+## Questions
+
+Reach out on [LinkedIn](https://www.linkedin.com/in/kiernan-dimeglio/).
