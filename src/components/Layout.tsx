@@ -38,12 +38,12 @@ export default function Layout({ children, onShowFilters }: Props) {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 pb-8 flex justify-center gap-6">
+      <footer className="relative z-10 pb-6 sm:pb-8 flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-6 px-6">
         <a
           href="https://buymeacoffee.com/kiernan"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-white/25 text-xs hover:text-white/50 transition-colors"
+          className="text-white/30 sm:text-white/25 text-xs hover:text-white/50 transition-colors py-1"
         >
           Support the API token usage ☕
         </a>
@@ -51,7 +51,7 @@ export default function Layout({ children, onShowFilters }: Props) {
           href="https://github.com/krd2ad/ib-interview-rep"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-white/25 text-xs hover:text-white/50 transition-colors"
+          className="flex items-center gap-1.5 text-white/30 sm:text-white/25 text-xs hover:text-white/50 transition-colors py-1"
         >
           <Github size={12} />
           Like this? Check it out on GitHub
@@ -60,7 +60,7 @@ export default function Layout({ children, onShowFilters }: Props) {
           href="https://www.linkedin.com/in/kiernan-dimeglio/"
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-white/25 text-xs hover:text-white/50 transition-colors"
+          className="flex items-center gap-1.5 text-white/30 sm:text-white/25 text-xs hover:text-white/50 transition-colors py-1"
         >
           <Linkedin size={12} />
           Contact Me
